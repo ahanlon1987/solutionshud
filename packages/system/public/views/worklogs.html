@@ -1,3 +1,7 @@
 <section data-ng-controller="WorklogController">
   <h1 mean-token="'home-default'">This is the worklog view</h1>
+
+    <button ng-click="myData.doClick(item, $event)">Send AJAX Request</button>
+    <br/>
+    Data from server: {{myData.fromServer}}
 </section>

@@ -9,6 +9,13 @@ Icon
 .Spotlight-V100
 .Trashes
 
+# ---
+# MONGODB FILES
+# ---
+
+db/data
+
+
 # --------------------
 # IntelliJ Files
 # --------------------
