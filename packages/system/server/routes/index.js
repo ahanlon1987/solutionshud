@@ -2,6 +2,17 @@
 
 module.exports = function(System, app, auth, database) {
 
+//  var http = require('http');
+  var JiraApi = require("jira").JiraApi;
+
+  var config = {
+        'user': 'jirabot',
+        'password': 'jiraBotSlalom1',
+        'port':'443',
+        'host': 'slalom100.jira.com'
+    };
+
+
   // Home route
   var index = require('../controllers/index');
   app.route('/')
@@ -11,7 +22,28 @@ module.exports = function(System, app, auth, database) {
   // Worklog route, in the future this will return data from JIRAs API
   app.route('/worklog')
       .get(function(req, res, next){
-         res.json({"worklog":[{"key":"NGEN-5431","summary":"Add logic to track which agent assisted which member","entries":[{"comment":"","timeSpent":10800,"author":"steved","authorFullName":"Steve Daskam","created":1411169903505,"startDate":1411083480000,"updateAuthor":"steved","updateAuthorFullName":"Steve Daskam","updated":1411169903505},{"comment":"","timeSpent":3600,"author":"steved","authorFullName":"Steve Daskam","created":1411169543193,"startDate":1411169520000,"updateAuthor":"steved","updateAuthorFullName":"Steve Daskam","updated":1411169543193}]},{"key":"NGEN-5538","summary":"RSC Sprint 12 Training","entries":[{"comment":"","timeSpent":3600,"author":"steved","authorFullName":"Steve Daskam","created":1411169378652,"startDate":1411169340000,"updateAuthor":"steved","updateAuthorFullName":"Steve Daskam","updated":1411169378652}]},{"key":"NGEN-5534","summary":"RSC Sprint 12 Practice (includes HCSC-related supported)","entries":[{"comment":"","timeSpent":14400,"author":"steved","authorFullName":"Steve Daskam","created":1411055734910,"startDate":1410969300000,"updateAuthor":"steved","updateAuthorFullName":"Steve Daskam","updated":1411055734910},{"comment":"","timeSpent":7200,"author":"steved","authorFullName":"Steve Daskam","created":1411169834533,"startDate":1411083420000,"updateAuthor":"steved","updateAuthorFullName":"Steve Daskam","updated":1411169834533},{"comment":"","timeSpent":3600,"author":"steved","authorFullName":"Steve Daskam","created":1411169459386,"startDate":1411169400000,"updateAuthor":"steved","updateAuthorFullName":"Steve Daskam","updated":1411169459386}]},{"key":"NGEN-5533","summary":"RSC Sprint 12 Meetings","entries":[{"comment":"","timeSpent":3600,"author":"steved","authorFullName":"Steve Daskam","created":1411169646255,"startDate":1410996780000,"updateAuthor":"steved","updateAuthorFullName":"Steve Daskam","updated":1411169646255},{"comment":"","timeSpent":7200,"author":"steved","authorFullName":"Steve Daskam","created":1411169784257,"startDate":1411083360000,"updateAuthor":"steved","updateAuthorFullName":"Steve Daskam","updated":1411169784257},{"comment":"","timeSpent":3600,"author":"steved","authorFullName":"Steve Daskam","created":1411169417415,"startDate":1411169400000,"updateAuthor":"steved","updateAuthorFullName":"Steve Daskam","updated":1411169417415}]},{"key":"NGEN-5532","summary":"RSC Sprint 12 Support","entries":[{"comment":"","timeSpent":3600,"author":"steved","authorFullName":"Steve Daskam","created":1411169710051,"startDate":1410996900000,"updateAuthor":"steved","updateAuthorFullName":"Steve Daskam","updated":1411169710051},{"comment":"","timeSpent":3600,"author":"steved","authorFullName":"Steve Daskam","created":1411169807266,"startDate":1411083360000,"updateAuthor":"steved","updateAuthorFullName":"Steve Daskam","updated":1411169807266}]},{"key":"NGEN-5316","summary":"[Desktop & Mobile] Add Additional Test Coverage for PCP Validation","entries":[{"comment":"","timeSpent":7200,"author":"steved","authorFullName":"Steve Daskam","created":1411169302375,"startDate":1410996480000,"updateAuthor":"steved","updateAuthorFullName":"Steve Daskam","updated":1411169302375}]},{"key":"NGEN-5544","summary":"As Provider Finder, I would like the 'product' value sent in the RSC pre-filtered URL params to be mapped from the provided spreadsheet","entries":[{"comment":"","timeSpent":14400,"author":"steved","authorFullName":"Steve Daskam","created":1411169246912,"startDate":1411169220000,"updateAuthor":"steved","updateAuthorFullName":"Steve Daskam","updated":1411169246912}]}],"startDate":1410937200000,"endDate":1411542000000});
+
+          var query = 'sprint in openSprints()';
+          var jira = new JiraApi('https', config.host, config.port, config.user, config.password, '2');
+
+
+          jira.searchJira(query, {fields:["summary", "issuekey", "status",
+              "assignee", "timeestimate",
+              "workratio","aggregatetimeoriginalestimate",
+              "aggregatetimeestimate", "aggregatetimespent"]}, function(error, issues) {
+
+              if(error){
+                  console.log(error);
+                  return;
+              }
+
+              console.log(issues);
+              res.json(issues);
+
+
+          });
+
+
       });
 
 };
