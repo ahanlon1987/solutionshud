@@ -3,15 +3,12 @@
 
     <button ng-click="worklogData.doClick(item, $event)">Send AJAX Request</button>
     <br/>
-    <!--Data from server: {{worklogData}}-->
-
-    <ul>
+      <ul>
         <li ng-repeat="worklogItem in worklogData.worklog">
             {{worklogItem.key}} - {{worklogItem.summary}}
-
             <ul>
                 <li ng-repeat="entry in worklogItem.entries">
-                    time spent: {{entry.timeSpent}}, dateLogged: {{entry.updated}}
+                    Spent: {{entry.timeSpent/3600| number:0}} hours, dateLogged: {{entry.updated| date:"EEEE MM/dd/yyyy 'at' h:mma"}}
                 </li>
             </ul>
          </li>
